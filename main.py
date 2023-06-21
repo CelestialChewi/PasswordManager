@@ -1,8 +1,8 @@
 from tkinter import *
 
-# Password Generator
+# Password Generator Function
 
-# Save Password
+# Save Password Function
 
 # UI Setup
 window = Tk()

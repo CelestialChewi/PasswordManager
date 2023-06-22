@@ -1,6 +1,24 @@
 from tkinter import *
+from tkinter import messagebox
+import random
+import re
 
 # Password Generator Function
+letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+def generate_password():
+    password_entry.delete(0, END)
+    password_letters = [random.choice(letters) for _ in range(random.randint(8, 10))]
+    password_symbols = [random.choice(symbols) for _ in range(random.randint(2, 4))]
+    password_numbers = [random.choice(numbers) for _ in range(random.randint(2, 4))]
+
+    password_list = password_letters + password_symbols + password_numbers
+    random.shuffle(password_list)
+    generated_password = "".join(password_list)
+
+    password_entry.insert(0, generated_password)
 
 # Save Password Function
 def save_password():
@@ -8,11 +26,28 @@ def save_password():
     email = email_entry.get()
     password = password_entry.get()
 
-    with open("password_file.txt", "a") as pf:
-        pf.write(f"{website} | {email} | {password}\n")
-        website_entry.delete(0, END)
-        email_entry.delete(0, email_entry.index(END)-10)
-        password_entry.delete(0, END)
+    if len(website) == 0 or len(email) < 11 or len(password) == 0:
+        messagebox.showinfo(title="Warning", message="Please complete the details")
+        validate_email(email)
+    elif not validate_email(email):
+        messagebox.showinfo(title="Warning", message="Please input the correct email address")
+    else:
+        is_correct = messagebox.askyesno(title="Password Manager", message=(f"Are these correct details?\n\n Website: {website}\n Email: {email}\n Password: {password}"))
+
+        if is_correct:
+            with open("password_file.txt", "a") as pf:
+                pf.write(f"{website} | {email} | {password}\n")
+                website_entry.delete(0, END)
+                email_entry.delete(0, email_entry.index(END)-10)
+                password_entry.delete(0, END)
+
+# Email Verification
+def validate_email(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    if(re.fullmatch(regex, email)):
+        return True
+    else:
+        return False
 
 # UI Setup
 window = Tk()
@@ -40,7 +75,7 @@ password_label.grid(row=3, column=0)
 password_entry = Entry(width=25)
 password_entry.grid(row=3, column=1)
 
-generate_password_button = Button(text="Generate Password")
+generate_password_button = Button(text="Generate Password", command=generate_password)
 generate_password_button.grid(row=3, column=2)
 
 add_button = Button(text="Add", width=41, command=save_password)

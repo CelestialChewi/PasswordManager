@@ -45,7 +45,7 @@ def save_password():
                 data.update(new_data) # Update old data with new data
 
         except FileNotFoundError:
-            open("password_file.json", "r")
+            open("password_file.json", "w")
 
         else:
             with open("password_file.json", "w") as pf:

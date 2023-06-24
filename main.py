@@ -49,7 +49,7 @@ def save_password():
                 json.dump(data, pf, indent=2) # Saving updated data
         finally:
             website_entry.delete(0, END)
-            email_entry.delete(0, email_entry.index(END)-10)
+            email_entry.delete(0, END)
             password_entry.delete(0, END)
             messagebox.showinfo(title="Confirmation", message="Data has added to the database")
 
@@ -91,7 +91,6 @@ email_label = Label(text="Email/Username:")
 email_label.grid(row=2, column=0)
 email_entry = Entry(width=25)
 email_entry.grid(row=2, column=1)
-# email_entry.insert(0, "@gmail.com")
 
 password_label = Label(text="Password:")
 password_label.grid(row=3, column=0)

@@ -24,16 +24,17 @@ def generate_password():
 # Save Password Function
 def save_password():
     website = website_entry.get()
-    email = email_entry.get() + dropdown_option.get()
+    email = email_entry.get()
+    complete_email = email + dropdown_option.get()
     password = password_entry.get()
     new_data = {
         website: {
-            "email": email,
+            "email": complete_email,
             "password": password,
         }
     }
 
-    if len(website) == 0 or len(email) == 0 or len(password) == 0:
+    if len(website) == 0 or len(email) < 3 or len(password) == 0:
         messagebox.showinfo(title="Warning", message="Please complete the details")
     else:
         try:
@@ -66,7 +67,7 @@ def search_password():
             messagebox.showinfo(title="Error", message="No Data Found")
         else:
             if website in data:
-                email = data[website]["email"]
+                email = data[website]["complete_email"]
                 password = data[website]["password"]
                 messagebox.showinfo(title=website, message=(f"Email: {email}\nPassword: {password}"))
             else:
@@ -110,7 +111,5 @@ dropdown_option = StringVar()
 dropdown_option.set("@gmail.com")
 email_domain_dropdown_menu = OptionMenu(window, dropdown_option, "@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com")
 email_domain_dropdown_menu.grid(row=2, column=2)
-
-
 
 window.mainloop()
